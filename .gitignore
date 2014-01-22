@@ -53,14 +53,20 @@ nosetests.xml
 *.[Cc]ache
 *.ilk
 *.log
+*.tlog
 *.lib
+*.pdb
 *.sbr
 *.sdf
+*.exp
 *.opensdf
+*.intermediate.*
+*.lastbuildstate
 *.unsuccessfulbuild
 ipch/
 obj/
 [Bb]in
+*.dll
 Ankh.NoLoad
 
 #MonoDevelop

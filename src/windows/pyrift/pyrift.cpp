@@ -1,4 +1,4 @@
-#include "../../LibOVR/Include/OVR.h"
+#include "../LibOVR/Include/OVR.h"
 
 using namespace OVR;
 

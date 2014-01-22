@@ -19,7 +19,4 @@
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
-  <ItemGroup>
-    <Library Include="..\..\LibOVR\Lib\Win32\libovr.lib" />
-  </ItemGroup>
 </Project>
