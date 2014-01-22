@@ -17,22 +17,24 @@ if sys.platform in ["linux", "linux2"]:
 elif sys.platform == "win32":
     pr = CDLL("pyrift")
 
-pr.initialize.argtypes = []
-pr.initialize.restypes = None
-pr.get_orientation.argtypes = [c_void_p, c_void_p, c_void_p]
-pr.get_orientation.restype = None
+# Set initial values in the DLL    
+pr.prepare()
+
+def _raise_errors(error_code):
+    if error_code == 1:
+        raise Exception("Could not detect an Oculus Rift", "NO_DEVICE")
+    elif error_code == 2:
+        raise Exception("Device not initialized; call initialize() first.", "NOT_INITIALIZED")
 
 def initialize():
-    error_code = pr.initialize()
-    
-    if error_code == 1:
-        raise Exception("Could not detect an Oculus Rift")
+    _raise_errors(pr.initialize())
 
 def get_orientation():
     yaw = ctypes.c_float()
     pitch = ctypes.c_float()
     roll = ctypes.c_float()
-    pr.get_orientation(ctypes.byref(yaw), ctypes.byref(pitch), ctypes.byref(roll))
+    
+    _raise_errors(pr.get_orientation(ctypes.byref(yaw), ctypes.byref(pitch), ctypes.byref(roll)))
     return yaw.value, pitch.value, roll.value
 
 def get_orientation_quaternion():
@@ -40,7 +42,8 @@ def get_orientation_quaternion():
     y = ctypes.c_float()
     z = ctypes.c_float()
     w = ctypes.c_float()
-    pr.get_orientation_quaternion(ctypes.byref(x), ctypes.byref(y), ctypes.byref(z), ctypes.byref(w))
+
+    _raise_errors(pr.get_orientation_quaternion(ctypes.byref(x), ctypes.byref(y), ctypes.byref(z), ctypes.byref(w)))
     return x.value, y.value, z.value, w.value
 
 
