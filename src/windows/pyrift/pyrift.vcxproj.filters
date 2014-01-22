@@ -15,7 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="pyrift.cpp">
+    <ClCompile Include="..\..\pyrift.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
