@@ -9,11 +9,13 @@ pr = None
 
 root = os.path.dirname(__file__)
 
-try:
-    pr = CDLL(os.path.join(root, "_pyrift.so"))
-except OSError:
-    pr = CDLL("_pyrift.so")
-    
+if sys.platform in ["linux", "linux2"]:
+    try:
+        pr = CDLL(os.path.join(root, "_pyrift.so"))
+    except OSError:
+        pr = CDLL("_pyrift.so")
+elif sys.platform == "win32":
+    pr = CDLL("pyrift")
 
 pr.initialize.argtypes = []
 pr.initialize.restypes = None
@@ -21,7 +23,10 @@ pr.get_orientation.argtypes = [c_void_p, c_void_p, c_void_p]
 pr.get_orientation.restype = None
 
 def initialize():
-    pr.initialize()
+    error_code = pr.initialize()
+    
+    if error_code == 1:
+        raise Exception("Could not detect an Oculus Rift")
 
 def get_orientation():
     yaw = ctypes.c_float()

@@ -6,7 +6,7 @@
 #   define DLLEXPORT
 #endif
 
-extern "C" DLLEXPORT void initialize( void );
+extern "C" DLLEXPORT int initialize( void );
 extern "C" DLLEXPORT void get_orientation( float *, float *, float * );
 extern "C" DLLEXPORT void get_orientation_quaternion( float *, float *, float *, float * );
 
@@ -15,20 +15,25 @@ using namespace OVR;
 Ptr<DeviceManager> manager;
 Ptr<HMDDevice> hmd;
 Ptr<SensorDevice> sensor;
-SensorFusion *fusion;
+SensorFusion *fusion = NULL;
 
 extern "C"
 {
     DLLEXPORT
-    void initialize( void )
+    int initialize( void )
     {
         System::Init( Log::ConfigureDefaultLog( LogMask_None ) );
         manager = *DeviceManager::Create();
-        hmd = *manager->EnumerateDevices<HMDDevice>().CreateDevice(); 
+        hmd = *manager->EnumerateDevices<HMDDevice>().CreateDevice();
+        if ( !hmd )
+            return 1; // Could not find Oculus Rift
+
         sensor = *hmd->GetSensor();
 
         fusion = new SensorFusion();
         fusion->AttachToSensor( sensor );
+
+        return 0;
     }
 
 
