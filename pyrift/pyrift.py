@@ -10,12 +10,16 @@ pr = None
 root = os.path.dirname(__file__)
 
 if sys.platform in ["linux", "linux2"]:
-    try:
-        pr = CDLL(os.path.join(root, "_pyrift.so"))
-    except OSError:
-        pr = CDLL("_pyrift.so")
+    object_name = "_pyrift.so"
 elif sys.platform == "win32":
-    pr = CDLL("pyrift")
+    object_name = "pyrift"
+else:
+    raise Exception("This OS is not yet supported")
+    
+try:
+    pr = CDLL(os.path.join(root, object_name))
+except OSError:
+    pr = CDLL(object_name)
 
 # Set initial values in the DLL    
 pr.prepare()
